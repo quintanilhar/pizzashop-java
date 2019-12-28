@@ -4,7 +4,7 @@
   <groupId>me.quintanilha.pizzashop</groupId>
   <artifactId>pizzashop</artifactId>
   <name>PizzaShop</name>
-  <version>1.0</version>
+  <version>1.0.0</version>
   <build>
     <plugins>
       <plugin>
@@ -83,9 +83,58 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.19.1</version>
+        <configuration>
+          <excludes>
+            <exclude>cucumber.RunCucumberTest</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <version>4.1.2</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>groovy</artifactId>
+          <groupId>org.codehaus.groovy</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>groovy-xml</artifactId>
+          <groupId>org.codehaus.groovy</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>httpclient</artifactId>
+          <groupId>org.apache.httpcomponents</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>httpmime</artifactId>
+          <groupId>org.apache.httpcomponents</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>hamcrest</artifactId>
+          <groupId>org.hamcrest</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>tagsoup</artifactId>
+          <groupId>org.ccil.cowan.tagsoup</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>json-path</artifactId>
+          <groupId>io.rest-assured</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>xml-path</artifactId>
+          <groupId>io.rest-assured</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
     <dependency>
       <groupId>io.cucumber</groupId>
       <artifactId>cucumber-java8</artifactId>
