@@ -1,13 +1,28 @@
-version: '3'
+version: "3.7"
 
 services:
-  app:
-    image: openjdk:13
+  shop:
+    image: openjdk:11-jre-slim
+    networks:
+      - backend
+    ports:
+      - "8090:8080"
+      - "8091:8081"
+    depends_on:
+      - deps
     volumes:
-      - .:/var/www
-  maven:
-    image: maven:3-jdk-13
+      - ./pizzashop/target/pizzashop-1.0.0.jar:/var/www/pizzashop-1.0.0.jar
+      - ./pizzashop/config.yml:/var/www/config.yml
+    working_dir: /var/www
+    command: ["java", "-jar", "pizzashop-1.0.0.jar", "server", "config.yml"]
+
+  deps:
+    image: maven:3-jdk-11-slim
     volumes:
       - .:/var/www
       - ~/.m2/repository:/root/.m2
-    working_dir: /var/www
+    working_dir: /var/www/pizzashop
+    command: ["mvn", "clean", "package"]
+
+networks:
+  backend:
