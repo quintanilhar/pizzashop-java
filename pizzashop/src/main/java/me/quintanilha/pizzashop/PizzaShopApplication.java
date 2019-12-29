@@ -1,6 +1,8 @@
 package me.quintanilha.pizzashop;
 
 import io.dropwizard.Application;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import me.quintanilha.pizzashop.health.PizzaHealthCheck;
@@ -19,12 +21,16 @@ public class PizzaShopApplication extends Application<PizzaShopConfiguration> {
 
     @Override
     public void initialize(final Bootstrap<PizzaShopConfiguration> bootstrap) {
-        // TODO: application initialization
+        bootstrap.addBundle(new MigrationsBundle<PizzaShopConfiguration>() {
+            @Override
+            public DataSourceFactory getDataSourceFactory(PizzaShopConfiguration configuration) {
+                return configuration.getDataSourceFactory();
+            }
+        });
     }
 
     @Override
-    public void run(final PizzaShopConfiguration configuration,
-                    final Environment environment) {
+    public void run(final PizzaShopConfiguration configuration, final Environment environment) {
         final PizzaResource resource = new PizzaResource();
         environment.jersey().register(resource);
 

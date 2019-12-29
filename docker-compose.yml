@@ -10,6 +10,8 @@ services:
       - "8091:8081"
     depends_on:
       - deps
+      - database
+      - migration
     volumes:
       - ./pizzashop/target/pizzashop-1.0.0.jar:/var/www/pizzashop-1.0.0.jar
       - ./pizzashop/config.yml:/var/www/config.yml
@@ -24,5 +26,31 @@ services:
     working_dir: /var/www/pizzashop
     command: ["mvn", "clean", "package"]
 
+  migration:
+    image: openjdk:11-jre-slim
+    networks:
+      - backend
+    depends_on:
+      - deps
+      - database
+    volumes:
+      - ./pizzashop/target/pizzashop-1.0.0.jar:/var/www/pizzashop-1.0.0.jar
+      - ./pizzashop/config.yml:/var/www/config.yml
+    working_dir: /var/www
+    command: ["java", "-jar", "pizzashop-1.0.0.jar", "db", "migrate", "config.yml"]
+
+  database:
+    image: postgres:12.1
+    volumes:
+      - database:/var/lib/postgresql/data
+    networks:
+      - backend
+    environment:
+      POSTGRES_PASSWORD: pizzashop
+      POSTGRES_DB: shop
+
 networks:
   backend:
+
+volumes:
+  database:
